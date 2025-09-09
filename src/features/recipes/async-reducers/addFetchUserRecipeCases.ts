@@ -10,8 +10,8 @@ import { userRecipeService } from "../services";
 import type { Recipe } from "../validation";
 
 export const fetchUserRecipes = createAsyncThunk(
-  "userRecipes/fetchAll",
-  async (options: FilterOptions) => {
+  "userRecipes/fetchUserRecipes",
+  async (options?: FilterOptions) => {
     return await userRecipeService.getUserRecipes(options);
   }
 );

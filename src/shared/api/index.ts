@@ -9,13 +9,41 @@ type ApiRequestConfig = {
   withCredentials?: boolean;
 };
 
-const sendApiRequest = async <T>(config: ApiRequestConfig) => {
+const sendApiRequest = async <T>(
+  config: ApiRequestConfig
+): Promise<ServerResponse<T>> => {
   const { url, withCredentials, ...otherOptions } = config;
   const headers = { "Content-Type": "application/json" };
   const credentials: RequestCredentials = withCredentials ? "include" : "omit";
 
-  const res = await fetch(url, { ...otherOptions, headers, credentials });
-  return (await res.json()) as ServerResponse<T>;
+  try {
+    const res = await fetch(url, { ...otherOptions, headers, credentials });
+    if (!res.ok)
+      return {
+        status: "error",
+        message: "Invalid response",
+      };
+
+    const data = await res.json();
+
+    return {
+      status: "success",
+      message: "Data retrieved successfully",
+      data,
+    };
+  } catch (err) {
+    if (err instanceof TypeError) {
+      return {
+        status: "error",
+        message: err.message,
+      };
+    }
+
+    return {
+      status: "error",
+      message: `${err}`,
+    };
+  }
 };
 
 export const apiGet = <T>(

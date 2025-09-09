@@ -2,6 +2,7 @@ import { DIFFICULITY } from "@/shared/constants";
 import z from "zod";
 import { CUISINE, MEAL_TYPE } from "./constants";
 import type { Override } from "@/shared/types";
+import { validate } from "@/shared/utils";
 
 const createRecipeSchema = z.object({
   name: z.string().min(3),
@@ -37,8 +38,18 @@ type CreateRecipeFormState = Override<
   }
 >;
 
+const validateCreateRecipeInput = (data: unknown) =>
+  validate(createRecipeSchema, data);
+
+const validateRecipe = (data: unknown) => validate(recipeSchema, data);
+
 type CreateRecipeInput = z.infer<typeof createRecipeSchema>;
 type Recipe = z.infer<typeof recipeSchema>;
 
-export { createRecipeSchema, recipeSchema };
+export {
+  createRecipeSchema,
+  recipeSchema,
+  validateCreateRecipeInput,
+  validateRecipe,
+};
 export type { CreateRecipeFormState, CreateRecipeInput, Recipe };

@@ -5,6 +5,7 @@ import type { FormState } from "@/shared/types";
 import type { CreateRecipeFormState } from "../validation";
 import type { UserRecipeState } from "../types";
 import { addFetchUserRecipeCases } from "../async-reducers";
+import type { RootState } from "@/store";
 
 const initialFormState: FormState<CreateRecipeFormState> = {
   values: {
@@ -48,4 +49,6 @@ const userRecipeSlice = createSlice({
 
 const userRecipeReducer = userRecipeSlice.reducer;
 
-export { userRecipeReducer };
+const selectUserRecipes = (state: RootState) => state.userRecipes.recipes;
+
+export { userRecipeReducer, selectUserRecipes };

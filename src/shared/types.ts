@@ -14,7 +14,12 @@ type FormState<T> = {
 
 type Override<T, U> = Omit<T, keyof U> & U;
 
-type ServerResponse<T> = T;
+type ServerResponse<T> = {
+  status: "success" | "error";
+  message: string;
+  errors?: Partial<Record<keyof T, string>>;
+  data?: T;
+};
 
 type FilterOptions = {
   limit?: number;
