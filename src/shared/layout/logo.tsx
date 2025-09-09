@@ -1,5 +1,5 @@
 const Logo = () => {
-  return <div className="text-lg font-bold">Logo.</div>;
+  return <div className="text-2xl font-bold">Recipe.store</div>;
 };
 
 export default Logo;

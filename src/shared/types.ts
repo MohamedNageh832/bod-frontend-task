@@ -14,4 +14,18 @@ type FormState<T> = {
 
 type Override<T, U> = Omit<T, keyof U> & U;
 
-export type { FetchStatus, FormErrors, FormState, Override };
+type ServerResponse<T> = T;
+
+type FilterOptions = {
+  limit?: number;
+  page?: number;
+};
+
+export type {
+  FetchStatus,
+  FormErrors,
+  FormState,
+  Override,
+  ServerResponse,
+  FilterOptions,
+};
