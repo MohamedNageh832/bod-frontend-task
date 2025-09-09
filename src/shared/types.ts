@@ -12,11 +12,6 @@ type FormState<T> = {
   errors: FormErrors<T>;
 };
 
-type MultiStepFormState<T> = {
-  values: T;
-  status: FetchStatus;
-  errors: FormErrors<T>;
-  currentStep: number;
-};
+type Override<T, U> = Omit<T, keyof U> & U;
 
-export type { FetchStatus, FormErrors, FormState, MultiStepFormState };
+export type { FetchStatus, FormErrors, FormState, Override };

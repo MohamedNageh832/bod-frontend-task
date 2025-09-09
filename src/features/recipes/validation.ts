@@ -1,8 +1,9 @@
 import { DIFFICULITY } from "@/shared/constants";
 import z from "zod";
 import { CUISINE, MEAL_TYPE } from "./constants";
+import type { Override } from "@/shared/types";
 
-const baseRecipeSchema = z.object({
+const createRecipeSchema = z.object({
   name: z.string().min(3),
   ingredients: z.array(z.string().min(2)).min(2),
   instructions: z.array(z.string().min(2)).min(2),
@@ -17,25 +18,27 @@ const baseRecipeSchema = z.object({
   mealType: z.array(z.enum(MEAL_TYPE)),
 });
 
-const createRecipeInputSchema = baseRecipeSchema.extend({
-  prepTimeMinutes: z.number().nullable(),
-  cookTimeMinutes: z.number().nullable(),
-  servings: z.number().nullable(),
-  difficulty: z.enum(DIFFICULITY).nullable(),
-  cuisine: z.enum(CUISINE).nullable(),
-  caloriesPerServing: z.number().nullable(),
-});
-
-const recipeSchema = baseRecipeSchema.extend({
+const recipeSchema = createRecipeSchema.extend({
   id: z.number(),
   userId: z.number(),
   reviewCount: z.number(),
   rating: z.number().nullable(),
 });
 
-type BaseRecipe = z.infer<typeof baseRecipeSchema>;
-type CreateRecipeInput = z.infer<typeof createRecipeInputSchema>;
+type CreateRecipeFormState = Override<
+  z.infer<typeof createRecipeSchema>,
+  {
+    prepTimeMinutes: number | null;
+    cookTimeMinutes: number | null;
+    servings: number | null;
+    difficulty: (typeof DIFFICULITY)[number] | null;
+    cuisine: (typeof CUISINE)[number] | null;
+    caloriesPerServing: number | null;
+  }
+>;
+
+type CreateRecipeInput = z.infer<typeof createRecipeSchema>;
 type Recipe = z.infer<typeof recipeSchema>;
 
-export { baseRecipeSchema, createRecipeInputSchema, recipeSchema };
-export type { BaseRecipe, CreateRecipeInput, Recipe };
+export { createRecipeSchema, recipeSchema };
+export type { CreateRecipeFormState, CreateRecipeInput, Recipe };

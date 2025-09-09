@@ -1,8 +1,8 @@
-import type { MultiStepFormState } from "@/shared/types";
+import type { FormState } from "@/shared/types";
 import { createSlice } from "@reduxjs/toolkit";
-import type { CreateRecipeInput } from "./validation";
+import type { CreateRecipeFormState } from "./validation";
 
-const initialFormState: MultiStepFormState<CreateRecipeInput> = {
+const initialFormState: FormState<CreateRecipeFormState> = {
   values: {
     name: "",
     ingredients: [],
@@ -19,7 +19,6 @@ const initialFormState: MultiStepFormState<CreateRecipeInput> = {
   },
   status: "idle",
   errors: {},
-  currentStep: 1,
 };
 
 const initialSliceState = {
