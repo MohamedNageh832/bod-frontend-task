@@ -1,9 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { userRecipeReducer } from "./features/recipes";
+import { globalSearchReducer } from "./features/global-search";
 
 const store = configureStore({
   reducer: {
     userRecipes: userRecipeReducer,
+    globalSearch: globalSearchReducer,
   },
 });
 

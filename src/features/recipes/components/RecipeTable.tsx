@@ -1,3 +1,7 @@
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Loader2, Trash } from "lucide-react";
+
 import {
   Button,
   Pagination,
@@ -11,12 +15,10 @@ import {
   TableRow,
 } from "@/shared/components/ui";
 import type { AppDispatch, RootState } from "@/store";
-import { Loader2, Trash } from "lucide-react";
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { cn } from "@/shared/utils";
+
 import { fetchUserRecipes } from "../async-reducers/addFetchUserRecipeCases";
 import { selectUserRecipes } from "../store/userRecipeSlice";
-import { cn } from "@/shared/utils";
 
 const RecipeTable = () => {
   const state = useSelector((state: RootState) => state.userRecipes);
@@ -25,7 +27,7 @@ const RecipeTable = () => {
 
   useEffect(() => {
     if (state.status.loadUserRecipes === "idle") dispatch(fetchUserRecipes());
-  }, [state.status.loadUserRecipes]);
+  }, [state.status.loadUserRecipes, dispatch]);
 
   return (
     <section>

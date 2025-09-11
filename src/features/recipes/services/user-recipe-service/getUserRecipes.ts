@@ -9,8 +9,5 @@ export const getUserRecipes = async (options?: FilterOptions) => {
     throw Error("Unable to fetch recipes. Try again later");
   }
 
-  return response.data?.recipes.filter((r) => {
-    const { isValid } = validateRecipe(r);
-    return isValid;
-  });
+  return response.data?.recipes.filter((r) => validateRecipe(r).isValid);
 };

@@ -13,4 +13,6 @@ type UserRecipeState = {
   formState: FormState<CreateRecipeFormState>;
 };
 
-export type { UserRecipeState };
+type RecipeResponse = { recipes: Recipe[] };
+
+export type { UserRecipeState, RecipeResponse };

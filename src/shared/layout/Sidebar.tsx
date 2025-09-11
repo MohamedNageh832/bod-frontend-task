@@ -15,8 +15,8 @@ const Sidebar = () => {
           <NavLink
             className={({ isActive }) =>
               cn(
-                "flex gap-3 items-center py-2 px-4 rounded-md text-muted-foreground hover:bg-brand hover:text-secondary",
-                isActive && "text-secondary bg-brand"
+                "flex gap-3 items-center py-3 px-4 rounded-md hover:bg-brand hover:text-secondary",
+                isActive && "bg-brand/10"
               )
             }
             key={link.url}

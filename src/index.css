@@ -4,15 +4,13 @@
 @custom-variant dark (&:is(.dark *));
 
 @layer utilities {
-  .flex-center {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
   .h-screen {
     height: 100vh;
     height: 100dvh;
+  }
+
+  .text-sm {
+    line-height: normal;
   }
 }
 
@@ -137,5 +135,13 @@
 
   button {
     @apply cursor-pointer;
+  }
+
+  .flex-center {
+    @apply flex justify-center items-center;
+  }
+
+  .flex-between {
+    @apply flex justify-between items-center;
   }
 }

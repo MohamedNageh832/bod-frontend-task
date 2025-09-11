@@ -1,6 +1,7 @@
 import { Outlet } from "react-router";
 import Sidebar from "./Sidebar";
 import { Separator } from "../components/ui";
+import Navbar from "./Navbar";
 
 const MainLayout = () => {
   return (
@@ -9,8 +10,12 @@ const MainLayout = () => {
 
       <Separator orientation="vertical" />
 
-      <section className="p-5 w-full">
-        <Outlet />
+      <section className="flex flex-col gap-5 w-full px-5">
+        <Navbar />
+
+        <section>
+          <Outlet />
+        </section>
       </section>
     </section>
   );
