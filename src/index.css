@@ -144,4 +144,8 @@
   .flex-between {
     @apply flex justify-between items-center;
   }
+
+  .size-screen {
+    @apply h-screen w-screen;
+  }
 }

@@ -17,7 +17,7 @@ type Override<T, U> = Omit<T, keyof U> & U;
 type ServerResponse<T> = {
   status: "success" | "error";
   message: string;
-  errors?: Partial<Record<keyof T, string>>;
+  errors?: Partial<Record<keyof T, string>> & { formError?: string };
   data?: T;
 };
 
@@ -26,6 +26,8 @@ type FilterOptions = {
   page?: number;
 };
 
+type ValidationErrors<T> = Partial<Record<keyof T, string>>;
+
 export type {
   FetchStatus,
   FormErrors,
@@ -33,4 +35,5 @@ export type {
   Override,
   ServerResponse,
   FilterOptions,
+  ValidationErrors,
 };
