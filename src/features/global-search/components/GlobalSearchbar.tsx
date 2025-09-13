@@ -10,13 +10,13 @@ import {
 import { useClickOutside, useDebounce } from "@/shared/hooks";
 import RecipeItem from "./RecipeItem";
 import { useSelector } from "react-redux";
-import { useGlobalSearchActions } from "../hooks";
 import {
   selectError,
   selectIsSearching,
   selectQuery,
   selectResults,
-} from "../slice";
+} from "../store";
+import { executeSearch, updateQuery } from "../actions";
 
 const GlobalSearchbar = () => {
   const query = useSelector(selectQuery);
@@ -25,7 +25,6 @@ const GlobalSearchbar = () => {
   const results = useSelector(selectResults);
 
   const debounced = useDebounce(query, 300);
-  const { updateQuery, executeSearch } = useGlobalSearchActions();
   const commandRef = useRef(null);
   const [isFocused, setIsFocused] = useState(false);
 
@@ -34,7 +33,7 @@ const GlobalSearchbar = () => {
       if (debounced.trim().length < 3) return;
       executeSearch(debounced);
     })();
-  }, [debounced, executeSearch]);
+  }, [debounced]);
 
   const handleFocus = () => {
     setIsFocused(true);
@@ -57,7 +56,7 @@ const GlobalSearchbar = () => {
 
       {isFocused && (
         <CommandList className="absolute top-[115%] left-0 w-full z-10 p-2 rounded-lg shadow bg-background ">
-          {query.trim().length < 3 ? (
+          {debounced.trim().length < 3 ? (
             <CommandEmpty className="text-muted-foreground">
               Type at least 3 letters to search!
             </CommandEmpty>

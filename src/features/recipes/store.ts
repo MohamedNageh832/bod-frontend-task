@@ -2,9 +2,9 @@ import { createSlice } from "@reduxjs/toolkit";
 
 import type { FormState } from "@/shared/types";
 
-import type { CreateRecipeFormState } from "../validation";
-import type { UserRecipeState } from "../types";
-import { addFetchUserRecipeCases } from "../async-reducers";
+import type { CreateRecipeFormState } from "./validation";
+import type { UserRecipeState } from "./types";
+import { addFetchUserRecipesCases } from "./thunks";
 import type { RootState } from "@/store";
 
 const initialFormState: FormState<CreateRecipeFormState> = {
@@ -43,7 +43,7 @@ const userRecipeSlice = createSlice({
   initialState: initialSliceState,
   reducers: {},
   extraReducers: (builder) => {
-    addFetchUserRecipeCases(builder);
+    addFetchUserRecipesCases(builder);
   },
 });
 

@@ -1,6 +1,5 @@
 import { useDispatch } from "react-redux";
-import { globalSearchActions } from "../slice";
-import { executeSearch } from "../thunks";
+import { globalSearchActions } from "../store";
 import type { AppDispatch } from "@/store";
 import { useMemo } from "react";
 
@@ -10,7 +9,6 @@ const UseGlobalSearchActions = () => {
   return useMemo(
     () => ({
       updateQuery: (q: string) => dispatch(globalSearchActions.updateQuery(q)),
-      executeSearch: (q: string) => dispatch(executeSearch(q)),
     }),
     [dispatch]
   );

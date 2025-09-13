@@ -12,7 +12,7 @@ export const executeSearch = createAsyncThunk(
     const response = await globalSearchService.search(q);
 
     if (response.status === "success") return response.data as RecipeResponse;
-    else rejectWithValue(response.message);
+    else return rejectWithValue(response.message);
   }
 );
 

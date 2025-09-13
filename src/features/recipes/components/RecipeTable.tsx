@@ -17,8 +17,8 @@ import {
 import type { AppDispatch, RootState } from "@/store";
 import { cn } from "@/shared/utils";
 
-import { fetchUserRecipes } from "../async-reducers/addFetchUserRecipeCases";
-import { selectUserRecipes } from "../store/userRecipeSlice";
+import { fetchRecipes } from "../thunks";
+import { selectUserRecipes } from "../store";
 
 const RecipeTable = () => {
   const state = useSelector((state: RootState) => state.userRecipes);
@@ -26,7 +26,7 @@ const RecipeTable = () => {
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
-    if (state.status.loadUserRecipes === "idle") dispatch(fetchUserRecipes());
+    if (state.status.loadUserRecipes === "idle") dispatch(fetchRecipes());
   }, [state.status.loadUserRecipes, dispatch]);
 
   return (
