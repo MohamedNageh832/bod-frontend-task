@@ -5,12 +5,12 @@ import {
 
 import type { FilterOptions } from "@/shared/types";
 
-import type { UserRecipeState } from "../types";
+import type { RecipeState } from "../types";
 import { recipeService } from "../services";
 import type { Recipe } from "../validation";
 
 export const fetchRecipes = createAsyncThunk(
-  "userRecipes/fetchRecipes",
+  "recipes/fetchRecipes",
   async (options: FilterOptions | undefined, { rejectWithValue }) => {
     const response = await recipeService.getRecipes(options);
 
@@ -19,22 +19,22 @@ export const fetchRecipes = createAsyncThunk(
   }
 );
 
-export const addFetchUserRecipesCases = (
-  builder: ActionReducerMapBuilder<UserRecipeState>
+export const addFetchRecipesCases = (
+  builder: ActionReducerMapBuilder<RecipeState>
 ) => {
   builder
     .addCase(fetchRecipes.pending, (state) => {
-      state.status.loadUserRecipes = "loading";
-      delete state.errors.loadUserRecipes;
+      state.status.loadRecipes = "loading";
+      delete state.errors.loadRecipes;
     })
     .addCase(fetchRecipes.fulfilled, (state, action) => {
-      state.status.loadUserRecipes = "success";
+      state.status.loadRecipes = "success";
       state.recipes = action.payload as Recipe[];
     })
     .addCase(fetchRecipes.rejected, (state, action) => {
-      state.status.loadUserRecipes = "error";
+      state.status.loadRecipes = "error";
 
       const message = action.payload as string;
-      state.errors.loadUserRecipes = message;
+      state.errors.loadRecipes = message;
     });
 };

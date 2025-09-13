@@ -1,1 +1,5 @@
-export { fetchRecipes, addFetchUserRecipesCases } from "./fetchRecipes";
+import { fetchRecipes } from "./fetchRecipes";
+
+export { addFetchRecipesCases } from "./fetchRecipes";
+
+export const thunks = { fetchRecipes };

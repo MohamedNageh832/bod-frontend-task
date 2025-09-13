@@ -1,6 +1,4 @@
-import { store } from "@/store";
+import { dispatch } from "@/store";
 import { thunks } from "../thunks";
 
-export const executeSearch = (q: string) => {
-  store.dispatch(thunks.executeSearch(q));
-};
+export const executeSearch = (q: string) => dispatch(thunks.executeSearch(q));

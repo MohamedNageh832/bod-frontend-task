@@ -5,7 +5,6 @@ type GlobalSearchState = {
   error: string | null;
   isSearching: boolean;
   results: Recipe[];
-  isSearchbarFocused: boolean;
 };
 
 export type { GlobalSearchState };

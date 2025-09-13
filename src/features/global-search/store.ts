@@ -9,7 +9,6 @@ const initialState: GlobalSearchState = {
   results: [],
   error: null,
   isSearching: false,
-  isSearchbarFocused: false,
 };
 
 const globalSearchSlice = createSlice({

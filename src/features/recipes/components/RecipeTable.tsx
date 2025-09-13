@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { Loader2, Trash } from "lucide-react";
 
 import {
@@ -14,27 +14,26 @@ import {
   TableHeader,
   TableRow,
 } from "@/shared/components/ui";
-import type { AppDispatch, RootState } from "@/store";
+import type { RootState } from "@/store";
 import { cn } from "@/shared/utils";
 
-import { fetchRecipes } from "../thunks";
-import { selectUserRecipes } from "../store";
+import { fetchRecipes } from "../actions";
+import { selectRecipes } from "../store";
 
 const RecipeTable = () => {
-  const state = useSelector((state: RootState) => state.userRecipes);
-  const recipes = useSelector(selectUserRecipes);
-  const dispatch = useDispatch<AppDispatch>();
+  const state = useSelector((state: RootState) => state.recipes);
+  const recipes = useSelector(selectRecipes);
 
   useEffect(() => {
-    if (state.status.loadUserRecipes === "idle") dispatch(fetchRecipes());
-  }, [state.status.loadUserRecipes, dispatch]);
+    if (state.status.loadRecipes === "idle") fetchRecipes();
+  }, [state.status.loadRecipes]);
 
   return (
     <section>
       <section
         className={cn(
           "relative h-[80vh] rounded-lg",
-          state.status.loadUserRecipes === "loading"
+          state.status.loadRecipes === "loading"
             ? "overflow-hidden"
             : "overflow-auto"
         )}
@@ -67,7 +66,7 @@ const RecipeTable = () => {
           </TableBody>
         </Table>
 
-        {state.status.loadUserRecipes === "loading" && (
+        {state.status.loadRecipes === "loading" && (
           <section className="absolute top-0 flex-center gap-2 bg-secondary/50 w-full h-full">
             <Loader2 className="text-brand animate-spin" size={40} />{" "}
             <p>Loading...</p>
