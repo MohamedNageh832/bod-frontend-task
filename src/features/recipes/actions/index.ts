@@ -1,1 +1,0 @@
-export { fetchRecipes } from "./fetchRecipes";

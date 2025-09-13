@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Loader2, Trash } from "lucide-react";
 
 import {
@@ -14,19 +14,20 @@ import {
   TableHeader,
   TableRow,
 } from "@/shared/components/ui";
-import type { RootState } from "@/store";
+import type { AppDispatch, RootState } from "@/store";
 import { cn } from "@/shared/utils";
 
-import { fetchRecipes } from "../actions";
 import { selectRecipes } from "../store";
+import { fetchRecipes } from "../thunks";
 
 const RecipeTable = () => {
   const state = useSelector((state: RootState) => state.recipes);
   const recipes = useSelector(selectRecipes);
+  const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
-    if (state.status.loadRecipes === "idle") fetchRecipes();
-  }, [state.status.loadRecipes]);
+    if (state.status.loadRecipes === "idle") dispatch(fetchRecipes());
+  }, [state.status.loadRecipes, dispatch]);
 
   return (
     <section>

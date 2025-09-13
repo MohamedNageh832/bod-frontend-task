@@ -20,7 +20,7 @@ const globalSearchSlice = createSlice({
   },
 });
 
-export const { actions: globalSearchActions } = globalSearchSlice;
+export const { updateQuery } = globalSearchSlice.actions;
 
 const globalSearchReducer = globalSearchSlice.reducer;
 

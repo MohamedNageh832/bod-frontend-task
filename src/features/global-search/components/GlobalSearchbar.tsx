@@ -9,20 +9,24 @@ import {
 } from "@/shared/components/ui";
 import { useClickOutside, useDebounce } from "@/shared/hooks";
 import RecipeItem from "./RecipeItem";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   selectError,
   selectIsSearching,
   selectQuery,
   selectResults,
+  updateQuery,
 } from "../store";
-import { executeSearch, updateQuery } from "../actions";
+
+import { executeSearch } from "../thunks";
+import type { AppDispatch } from "@/store";
 
 const GlobalSearchbar = () => {
   const query = useSelector(selectQuery);
   const isSearching = useSelector(selectIsSearching);
   const error = useSelector(selectError);
   const results = useSelector(selectResults);
+  const dispatch = useDispatch<AppDispatch>();
 
   const debounced = useDebounce(query, 300);
   const commandRef = useRef(null);
@@ -31,13 +35,12 @@ const GlobalSearchbar = () => {
   useEffect(() => {
     (async () => {
       if (debounced.trim().length < 3) return;
-      executeSearch(debounced);
+      dispatch(executeSearch(debounced));
     })();
-  }, [debounced]);
+  }, [debounced, dispatch]);
 
-  const handleFocus = () => {
-    setIsFocused(true);
-  };
+  const handleQueryChange = (q: string) => dispatch(updateQuery(q));
+  const handleFocus = () => setIsFocused(true);
 
   useClickOutside(commandRef, () => setIsFocused(false));
 
@@ -50,7 +53,7 @@ const GlobalSearchbar = () => {
       <CommandInput
         className=""
         placeholder="Search..."
-        onValueChange={updateQuery}
+        onValueChange={handleQueryChange}
         onFocus={handleFocus}
       />
 
