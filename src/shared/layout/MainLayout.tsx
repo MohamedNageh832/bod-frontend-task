@@ -9,7 +9,7 @@ const MainLayout = () => {
 
       <Separator orientation="vertical" />
 
-      <section className="p-5">
+      <section className="p-5 w-full">
         <Outlet />
       </section>
     </section>

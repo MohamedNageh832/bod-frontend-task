@@ -1,5 +1,11 @@
+import { RecipeTable } from "@/features/recipes";
+
 const HomePage = () => {
-  return <>Home</>;
+  return (
+    <>
+      <RecipeTable />
+    </>
+  );
 };
 
 export default HomePage;
