@@ -1,1 +1,1 @@
-export * as userRecipeService from "./user-recipe-service";
+export * as recipeService from "./recipe-service";

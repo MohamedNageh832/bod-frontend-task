@@ -4,6 +4,7 @@ const createCrudRoutes = (base: string) => ({
   getOne: (id: number) => `${base}/${id}`,
   updateOne: (id: number) => `${base}/${id}`,
   deleteOne: (id: number) => `${base}/${id}`,
+  search: (q: string) => `${base}/search?q=${q}`,
 });
 
 export const ROUTES = {
@@ -13,7 +14,9 @@ export const ROUTES = {
     },
   },
   recipes: {
-    ui: {},
+    ui: {
+      root: "/recipes",
+    },
     api: createCrudRoutes("https://dummyjson.com/recipes"),
   },
 };

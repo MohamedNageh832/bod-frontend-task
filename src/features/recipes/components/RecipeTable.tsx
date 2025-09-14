@@ -1,3 +1,7 @@
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Loader2, Trash } from "lucide-react";
+
 import {
   Button,
   Pagination,
@@ -11,28 +15,26 @@ import {
   TableRow,
 } from "@/shared/components/ui";
 import type { AppDispatch, RootState } from "@/store";
-import { Loader2, Trash } from "lucide-react";
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchUserRecipes } from "../async-reducers/addFetchUserRecipeCases";
-import { selectUserRecipes } from "../store/userRecipeSlice";
 import { cn } from "@/shared/utils";
 
+import { selectRecipes } from "../store";
+import { fetchRecipes } from "../thunks";
+
 const RecipeTable = () => {
-  const state = useSelector((state: RootState) => state.userRecipes);
-  const recipes = useSelector(selectUserRecipes);
+  const state = useSelector((state: RootState) => state.recipes);
+  const recipes = useSelector(selectRecipes);
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
-    if (state.status.loadUserRecipes === "idle") dispatch(fetchUserRecipes());
-  }, [state.status.loadUserRecipes]);
+    if (state.status.loadRecipes === "idle") dispatch(fetchRecipes());
+  }, [state.status.loadRecipes, dispatch]);
 
   return (
     <section>
       <section
         className={cn(
           "relative h-[80vh] rounded-lg",
-          state.status.loadUserRecipes === "loading"
+          state.status.loadRecipes === "loading"
             ? "overflow-hidden"
             : "overflow-auto"
         )}
@@ -65,7 +67,7 @@ const RecipeTable = () => {
           </TableBody>
         </Table>
 
-        {state.status.loadUserRecipes === "loading" && (
+        {state.status.loadRecipes === "loading" && (
           <section className="absolute top-0 flex-center gap-2 bg-secondary/50 w-full h-full">
             <Loader2 className="text-brand animate-spin" size={40} />{" "}
             <p>Loading...</p>

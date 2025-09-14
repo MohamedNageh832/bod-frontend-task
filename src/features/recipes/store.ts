@@ -2,9 +2,9 @@ import { createSlice } from "@reduxjs/toolkit";
 
 import type { FormState } from "@/shared/types";
 
-import type { CreateRecipeFormState } from "../validation";
-import type { UserRecipeState } from "../types";
-import { addFetchUserRecipeCases } from "../async-reducers";
+import type { CreateRecipeFormState } from "./validation";
+import type { RecipeState } from "./types";
+import { addFetchRecipesCases } from "./thunks";
 import type { RootState } from "@/store";
 
 const initialFormState: FormState<CreateRecipeFormState> = {
@@ -26,29 +26,29 @@ const initialFormState: FormState<CreateRecipeFormState> = {
   errors: {},
 };
 
-const initialSliceState: UserRecipeState = {
+const initialSliceState: RecipeState = {
   recipes: [],
   totalRecipeCount: 0,
   rowsPerPage: 10,
   currentPage: 1,
   status: {
-    loadUserRecipes: "idle",
+    loadRecipes: "idle",
   },
   errors: {},
   formState: initialFormState,
 };
 
-const userRecipeSlice = createSlice({
-  name: "userRecipes",
+const recipeSlice = createSlice({
+  name: "recipes",
   initialState: initialSliceState,
   reducers: {},
   extraReducers: (builder) => {
-    addFetchUserRecipeCases(builder);
+    addFetchRecipesCases(builder);
   },
 });
 
-const userRecipeReducer = userRecipeSlice.reducer;
+const recipeReducer = recipeSlice.reducer;
 
-const selectUserRecipes = (state: RootState) => state.userRecipes.recipes;
+const selectRecipes = (state: RootState) => state.recipes.recipes;
 
-export { userRecipeReducer, selectUserRecipes };
+export { recipeReducer, selectRecipes };
