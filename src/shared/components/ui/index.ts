@@ -7,3 +7,6 @@ export * from "./input";
 export * from "./dialog";
 export * from "./command";
 export * from "./dropdown-menu";
+export * from "./checkbox";
+export * from "./select";
+export * from "./sonner";

@@ -11,8 +11,8 @@ export const updateSignInValue = (
   const props = action.payload;
   const keys = Object.keys(props) as (keyof SignInInput)[];
 
-  keys.forEach((key) => {
-    const value = props[key] as SignInInput[typeof key];
+  keys.forEach(<T extends keyof SignInInput>(key: T) => {
+    const value = props[key] as SignInInput[T];
 
     state.signInFormState.values[key] = value;
     delete state.signInFormState.errors[key];

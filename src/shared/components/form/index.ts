@@ -1,2 +1,3 @@
-export { FormInput } from "./formInput";
-export { FormError } from "./formError";
+export * from "./formInput";
+export * from "./formError";
+export * from "./formCheckbox";

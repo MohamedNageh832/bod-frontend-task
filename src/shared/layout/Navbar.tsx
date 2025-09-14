@@ -39,7 +39,7 @@ const Navbar = () => {
               </AvatarFallback>
             </Avatar>
           </DropdownMenuTrigger>
-          <DropdownMenuContent className="flex flex-col gap-3 p-4">
+          <DropdownMenuContent className="flex flex-col gap-3 p-4" align="end">
             <section className="flex flex-col gap-1">
               <p className="font-bold">
                 {user.firstName} {user.lastName}

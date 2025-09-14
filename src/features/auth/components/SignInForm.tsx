@@ -1,6 +1,7 @@
-import { FormError, FormInput } from "@/shared/components/form";
+import { FormCheckbox, FormError, FormInput } from "@/shared/components/form";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  resetSignInValues,
   selectSignInFormState,
   selectStatus,
   selectUser,
@@ -14,6 +15,9 @@ import { Logo } from "@/shared/layout";
 import { useNavigate } from "react-router";
 import { ROUTES } from "@/shared/constants";
 import { Info, Loader2 } from "lucide-react";
+import type { SignInInput } from "../validation";
+import { DAY_IN_MINUTES } from "../constants";
+import { toast } from "sonner";
 
 const SignInForm = () => {
   const user = useSelector(selectUser);
@@ -32,16 +36,30 @@ const SignInForm = () => {
     if (user && isFetched) navigate(ROUTES.home.ui.root);
   }, [user, navigate, isFetched]);
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     dispatch(updateSignInValue({ [name]: value }));
   };
+
+  const handleCheckboxChange =
+    (name: keyof SignInInput) => (checked: boolean) => {
+      dispatch(
+        updateSignInValue({ [name]: checked ? 7 * DAY_IN_MINUTES : 60 })
+      );
+    };
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     const result = await dispatch(signIn());
 
     if (result.meta.requestStatus !== "fulfilled") return;
+    toast.success(`Sign in successful.`, {
+      description: `Your session will be valid for ${
+        formState.values.expiresInMins === 60 ? "1 hour" : "1 week"
+      }`,
+    });
+
+    dispatch(resetSignInValues());
     navigate(ROUTES.home.ui.root);
   };
 
@@ -78,7 +96,7 @@ const SignInForm = () => {
           name="username"
           id="username"
           value={formState.values["username"]}
-          onChange={handleChange}
+          onChange={handleInputChange}
           error={formState.errors.username}
         />
 
@@ -87,9 +105,16 @@ const SignInForm = () => {
           name="password"
           id="password"
           value={formState.values["password"]}
-          onChange={handleChange}
+          onChange={handleInputChange}
           type="password"
           error={formState.errors.password}
+        />
+
+        <FormCheckbox
+          id="expiresInMins"
+          label="Remember me"
+          onCheckedChange={handleCheckboxChange("expiresInMins")}
+          checked={formState.values.expiresInMins === 7 * DAY_IN_MINUTES}
         />
       </section>
 

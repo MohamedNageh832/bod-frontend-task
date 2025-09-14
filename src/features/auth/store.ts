@@ -4,7 +4,7 @@ import { addFetchCurrentUserCases, addSignInCases } from "./thunks";
 import type { RootState } from "@/store";
 import * as reducers from "./reducers";
 
-const initialSignUpFormState: SignUpFormState = {
+const createInitialSignUpFormState = (): SignUpFormState => ({
   values: {
     firstName: "",
     lastName: "",
@@ -17,30 +17,31 @@ const initialSignUpFormState: SignUpFormState = {
   },
   status: "idle",
   errors: {},
-};
+});
 
-const initialSignInFormState: SignInFormState = {
+const createInitialSignInFormState = (): SignInFormState => ({
   values: {
     username: "",
     password: "",
+    expiresInMins: 60,
   },
   status: "idle",
   errors: {},
-};
+});
 
-const initialState: AuthState = {
+const createInitialState = (): AuthState => ({
   user: null,
-  signUpFormState: initialSignUpFormState,
-  signInFormState: initialSignInFormState,
+  signUpFormState: createInitialSignUpFormState(),
+  signInFormState: createInitialSignInFormState(),
   status: {
     fetchCurrentUser: "idle",
   },
   errors: {},
-};
+});
 
 const authSlice = createSlice({
   name: "auth",
-  initialState,
+  initialState: createInitialState(),
   reducers,
   extraReducers: (builder) => {
     addSignInCases(builder);
@@ -49,7 +50,8 @@ const authSlice = createSlice({
 });
 
 const authReducer = authSlice.reducer;
-export const { updateSignInValue, signOut } = authSlice.actions;
+export const { updateSignInValue, signOut, resetSignInValues } =
+  authSlice.actions;
 
 const selectSignUpFormState = (state: RootState) => state.auth.signUpFormState;
 const selectSignInFormState = (state: RootState) => state.auth.signInFormState;
@@ -62,4 +64,7 @@ export {
   selectSignInFormState,
   selectUser,
   selectStatus,
+  createInitialSignUpFormState,
+  createInitialSignInFormState,
+  createInitialState,
 };
