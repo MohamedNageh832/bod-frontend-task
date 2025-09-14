@@ -30,6 +30,9 @@ export const ROUTES = {
   recipes: {
     ui: {
       root: "/recipes",
+      recipe: "/recipes/:id",
+      create: "/recipes/create",
+      edit: "/recipes/:id/edit",
     },
     api: createCrudRoutes(`${BASE_URL}/recipes`),
   },

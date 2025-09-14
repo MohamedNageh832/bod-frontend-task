@@ -207,6 +207,10 @@
     @apply cursor-pointer;
   }
 
+  img {
+    max-width: none;
+  }
+
   .flex-center {
     @apply flex justify-center items-center;
   }

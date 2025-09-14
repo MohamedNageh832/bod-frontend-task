@@ -1,4 +1,4 @@
-import { Home } from "lucide-react";
+import { Home, UtensilsCrossed } from "lucide-react";
 import { ROUTES } from "../constants";
 
 const UseNavigationLinks = () => {
@@ -7,6 +7,11 @@ const UseNavigationLinks = () => {
       icon: <Home />,
       label: "Home",
       url: ROUTES.home.ui.root,
+    },
+    {
+      icon: <UtensilsCrossed />,
+      label: "Recipes",
+      url: ROUTES.recipes.ui.root,
     },
   ];
 };

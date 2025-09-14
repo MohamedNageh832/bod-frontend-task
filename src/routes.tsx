@@ -4,8 +4,9 @@ import { lazy } from "react";
 import { ProtectedRoute } from "./features/auth/components";
 import { ROUTES } from "./shared/constants";
 
-const HomePage = lazy(() => import("@/shared/pages/HomePage"));
 const SignInPage = lazy(() => import("@/features/auth/pages/SignInPage"));
+const HomePage = lazy(() => import("@/shared/pages/HomePage"));
+const RecipesPage = lazy(() => import("@/features/recipes/pages/RecipesPage"));
 
 export const AppRoutes = () => {
   return (
@@ -16,6 +17,7 @@ export const AppRoutes = () => {
         <Route path={ROUTES.home.ui.root} element={<ProtectedRoute />}>
           <Route path={ROUTES.home.ui.root} element={<MainLayout />}>
             <Route index element={<HomePage />} />
+            <Route path={ROUTES.recipes.ui.root} element={<RecipesPage />} />
           </Route>
         </Route>
       </Routes>

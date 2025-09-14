@@ -6,6 +6,7 @@ import type { CreateRecipeFormState } from "./validation";
 import type { RecipeState } from "./types";
 import { addFetchRecipesCases } from "./thunks";
 import type { RootState } from "@/store";
+import * as reducers from "./reducers";
 
 const initialFormState: FormState<CreateRecipeFormState> = {
   values: {
@@ -36,19 +37,34 @@ const initialSliceState: RecipeState = {
   },
   errors: {},
   formState: initialFormState,
+  visibleTableColumns: ["name", "prepTimeMinutes", "rating", "difficulty"],
 };
 
 const recipeSlice = createSlice({
   name: "recipes",
   initialState: initialSliceState,
-  reducers: {},
+  reducers,
   extraReducers: (builder) => {
     addFetchRecipesCases(builder);
   },
 });
 
+export const { updateVisibleColumns } = recipeSlice.actions;
+
 const recipeReducer = recipeSlice.reducer;
-
+const selectVisibleColumns = (state: RootState) =>
+  state.recipes.visibleTableColumns;
 const selectRecipes = (state: RootState) => state.recipes.recipes;
+const selectStatus = (state: RootState) => state.recipes.status;
+const selectTotalRecipeCount = (state: RootState) =>
+  state.recipes.totalRecipeCount;
+const selectRowsPerPage = (state: RootState) => state.recipes.rowsPerPage;
 
-export { recipeReducer, selectRecipes };
+export {
+  recipeReducer,
+  selectRecipes,
+  selectStatus,
+  selectVisibleColumns,
+  selectTotalRecipeCount,
+  selectRowsPerPage,
+};

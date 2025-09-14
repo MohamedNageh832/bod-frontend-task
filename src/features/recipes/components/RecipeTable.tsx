@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Loader2, Trash } from "lucide-react";
 
@@ -14,38 +14,76 @@ import {
   TableHeader,
   TableRow,
 } from "@/shared/components/ui";
-import type { AppDispatch, RootState } from "@/store";
+import type { AppDispatch } from "@/store";
 import { cn } from "@/shared/utils";
 
-import { selectRecipes } from "../store";
+import {
+  selectRecipes,
+  selectRowsPerPage,
+  selectStatus,
+  selectTotalRecipeCount,
+  selectVisibleColumns,
+} from "../store";
 import { fetchRecipes } from "../thunks";
+import { TABLE_COLUMNS } from "../constants";
+import type { Recipe } from "../validation";
 
 const RecipeTable = () => {
-  const state = useSelector((state: RootState) => state.recipes);
+  const visibleColumns = useSelector(selectVisibleColumns);
+  const status = useSelector(selectStatus);
   const recipes = useSelector(selectRecipes);
+  const rowsPerPage = useSelector(selectRowsPerPage);
+  const totalRecipeCount = useSelector(selectTotalRecipeCount);
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
-    if (state.status.loadRecipes === "idle") dispatch(fetchRecipes());
-  }, [state.status.loadRecipes, dispatch]);
+    if (status.loadRecipes === "idle") dispatch(fetchRecipes());
+  }, [status.loadRecipes, dispatch]);
+
+  const VisibleColumnCells = useCallback(
+    (recipe: Recipe) =>
+      visibleColumns.map((c) => {
+        const { value } = TABLE_COLUMNS[c];
+        const data = Array.isArray(recipe[value])
+          ? recipe[value].join(", ")
+          : recipe[value];
+
+        return (
+          <TableCell
+            className="max-w-[200px] text-ellipsis overflow-hidden"
+            key={`recipe-${c}-${recipe.id}`}
+          >
+            {c === "image" ? (
+              <img
+                className="size-[45px] rounded-lg"
+                src={recipe.image || ""}
+                alt={`${recipe.name} recipe image`}
+              />
+            ) : (
+              data
+            )}
+          </TableCell>
+        );
+      }),
+    [visibleColumns]
+  );
 
   return (
     <section>
       <section
         className={cn(
           "relative h-[80vh] rounded-lg",
-          state.status.loadRecipes === "loading"
-            ? "overflow-hidden"
-            : "overflow-auto"
+          status.loadRecipes === "loading" ? "overflow-hidden" : "overflow-auto"
         )}
       >
         <Table>
           <TableHeader className="sticky top-0">
             <TableRow>
-              <TableHead>Recipe Name</TableHead>
-              <TableHead>Preparation Time (Minutes)</TableHead>
-              <TableHead>Rating</TableHead>
-              <TableHead>Difficulty</TableHead>
+              {visibleColumns.map((c) => (
+                <TableHead key={`recipe-th-${c}`}>
+                  {TABLE_COLUMNS[c].text}
+                </TableHead>
+              ))}
               <TableHead>Controls</TableHead>
             </TableRow>
           </TableHeader>
@@ -53,10 +91,8 @@ const RecipeTable = () => {
           <TableBody>
             {recipes.map((recipe) => (
               <TableRow key={recipe.id}>
-                <TableCell>{recipe.name}</TableCell>
-                <TableCell>{recipe.prepTimeMinutes}</TableCell>
-                <TableCell>{recipe.rating}</TableCell>
-                <TableCell>{recipe.difficulty}</TableCell>
+                {VisibleColumnCells(recipe)}
+
                 <TableCell>
                   <Button variant="destructive">
                     <Trash />
@@ -67,7 +103,7 @@ const RecipeTable = () => {
           </TableBody>
         </Table>
 
-        {state.status.loadRecipes === "loading" && (
+        {status.loadRecipes === "loading" && (
           <section className="absolute top-0 flex-center gap-2 bg-secondary/50 w-full h-full">
             <Loader2 className="text-brand animate-spin" size={40} />{" "}
             <p>Loading...</p>
@@ -75,7 +111,7 @@ const RecipeTable = () => {
         )}
       </section>
 
-      {state.totalRecipeCount > state.rowsPerPage && (
+      {totalRecipeCount > rowsPerPage && (
         <Pagination>
           <PaginationContent>
             <PaginationItem>1</PaginationItem>
