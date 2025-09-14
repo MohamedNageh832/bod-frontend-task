@@ -1,3 +1,5 @@
+import { parsedEnv } from "../config";
+
 const createCrudRoutes = (base: string) => ({
   getAll: base,
   createOne: base,
@@ -7,7 +9,19 @@ const createCrudRoutes = (base: string) => ({
   search: (q: string) => `${base}/search?q=${q}`,
 });
 
+const BASE_URL = parsedEnv.VITE_BACKEND_URL;
+
 export const ROUTES = {
+  auth: {
+    ui: {
+      signIn: "/sign-in",
+    },
+    api: {
+      signIn: `${BASE_URL}/auth/login`,
+      me: `${BASE_URL}/auth/me`,
+      refresh: `${BASE_URL}/auth/refresh`,
+    },
+  },
   home: {
     ui: {
       root: "/",
@@ -17,6 +31,6 @@ export const ROUTES = {
     ui: {
       root: "/recipes",
     },
-    api: createCrudRoutes("https://dummyjson.com/recipes"),
+    api: createCrudRoutes(`${BASE_URL}/recipes`),
   },
 };
