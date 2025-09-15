@@ -4,7 +4,7 @@ import type { FormState } from "@/shared/types";
 
 import type { CreateRecipeFormState } from "./validation";
 import type { RecipeState } from "./types";
-import { addFetchRecipesCases } from "./thunks";
+import { addFetchRecipesCases, addSearchRecipesCases } from "./thunks";
 import type { RootState } from "@/store";
 import * as reducers from "./reducers";
 
@@ -28,12 +28,20 @@ const initialFormState: FormState<CreateRecipeFormState> = {
 };
 
 const initialSliceState: RecipeState = {
+  search: {
+    query: "",
+    results: [],
+    lastQuery: "",
+    currentPage: 1,
+    totalRecipeCount: 0,
+  },
   recipes: [],
-  totalRecipeCount: 0,
-  rowsPerPage: 10,
   currentPage: 1,
+  rowsPerPage: 10,
+  totalRecipeCount: 0,
   status: {
     loadRecipes: "idle",
+    searchRecipes: "idle",
   },
   errors: {},
   formState: initialFormState,
@@ -46,12 +54,14 @@ const recipeSlice = createSlice({
   reducers,
   extraReducers: (builder) => {
     addFetchRecipesCases(builder);
+    addSearchRecipesCases(builder);
   },
 });
 
-export const { updateVisibleColumns } = recipeSlice.actions;
+export const { updateSearchQuery, updateVisibleColumns } = recipeSlice.actions;
 
 const recipeReducer = recipeSlice.reducer;
+const selectSearch = (state: RootState) => state.recipes.search;
 const selectVisibleColumns = (state: RootState) =>
   state.recipes.visibleTableColumns;
 const selectRecipes = (state: RootState) => state.recipes.recipes;
@@ -64,6 +74,7 @@ export {
   recipeReducer,
   selectRecipes,
   selectStatus,
+  selectSearch,
   selectVisibleColumns,
   selectTotalRecipeCount,
   selectRowsPerPage,

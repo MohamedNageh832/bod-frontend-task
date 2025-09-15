@@ -20,6 +20,7 @@ import { cn } from "@/shared/utils";
 import {
   selectRecipes,
   selectRowsPerPage,
+  selectSearch,
   selectStatus,
   selectTotalRecipeCount,
   selectVisibleColumns,
@@ -29,9 +30,13 @@ import { TABLE_COLUMNS } from "../constants";
 import type { Recipe } from "../validation";
 
 const RecipeTable = () => {
+  const search = useSelector(selectSearch);
   const visibleColumns = useSelector(selectVisibleColumns);
   const status = useSelector(selectStatus);
   const recipes = useSelector(selectRecipes);
+  const isActiveSearch =
+    search.query.length > 0 && status.searchRecipes === "success";
+  const visibleRecipes = isActiveSearch ? search.results : recipes;
   const rowsPerPage = useSelector(selectRowsPerPage);
   const totalRecipeCount = useSelector(selectTotalRecipeCount);
   const dispatch = useDispatch<AppDispatch>();
@@ -72,7 +77,7 @@ const RecipeTable = () => {
     <section>
       <section
         className={cn(
-          "relative h-[80vh] rounded-lg",
+          "relative max-h-[80vh] rounded-lg border",
           status.loadRecipes === "loading" ? "overflow-hidden" : "overflow-auto"
         )}
       >
@@ -89,7 +94,24 @@ const RecipeTable = () => {
           </TableHeader>
 
           <TableBody>
-            {recipes.map((recipe) => (
+            {visibleRecipes.length === 0 && (
+              <TableRow>
+                <TableCell
+                  className="text-sm text-muted-foreground h-[250px]"
+                  colSpan={visibleColumns.length + 1}
+                >
+                  {search.query.length > 0 &&
+                  status.searchRecipes === "success" ? (
+                    <p className="flex-center w-full">No results were found.</p>
+                  ) : (
+                    <p className="flex-center w-full">
+                      No recipes. Create new ones
+                    </p>
+                  )}
+                </TableCell>
+              </TableRow>
+            )}
+            {visibleRecipes.map((recipe) => (
               <TableRow key={recipe.id}>
                 {VisibleColumnCells(recipe)}
 
@@ -103,10 +125,15 @@ const RecipeTable = () => {
           </TableBody>
         </Table>
 
-        {status.loadRecipes === "loading" && (
+        {(status.loadRecipes === "loading" ||
+          status.searchRecipes === "loading") && (
           <section className="absolute top-0 flex-center gap-2 bg-secondary/50 w-full h-full">
-            <Loader2 className="text-brand animate-spin" size={40} />{" "}
-            <p>Loading...</p>
+            <Loader2 className="text-brand animate-spin" size={30} />
+            {status.searchRecipes === "loading" ? (
+              <p>Searching...</p>
+            ) : (
+              <p>Fetching Recipes...</p>
+            )}
           </section>
         )}
       </section>

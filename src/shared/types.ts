@@ -23,7 +23,7 @@ type ServerResponse<T> = {
 
 type FilterOptions = {
   limit?: number;
-  page?: number;
+  offset?: number;
 };
 
 type ValidationErrors<T> = Partial<Record<keyof T, string>>;

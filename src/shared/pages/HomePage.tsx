@@ -1,9 +1,9 @@
-import { RecipeTable } from "@/features/recipes";
+import { ReadonlyRecipeTable } from "@/features/recipes";
 
 const HomePage = () => {
   return (
     <>
-      <RecipeTable />
+      <ReadonlyRecipeTable />
     </>
   );
 };
