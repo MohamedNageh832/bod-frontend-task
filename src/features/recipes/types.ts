@@ -9,13 +9,10 @@ type RecipeState = {
     query: string;
     results: Recipe[];
     lastQuery: string;
-    currentPage: number;
-    totalRecipeCount: number;
+    totalResults: number;
   };
   recipes: Recipe[];
   totalRecipeCount: number;
-  rowsPerPage: number;
-  currentPage: number;
   status: {
     loadRecipes: FetchStatus;
     searchRecipes: FetchStatus;

@@ -19,11 +19,12 @@ import { fetchRecipes } from "../thunks";
 const RecipeTable = () => {
   const status = useSelector(selectStatus);
   const recipes = useSelector(selectRecipes);
-
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
-    if (status.loadRecipes === "idle") dispatch(fetchRecipes());
+    if (status.loadRecipes !== "idle") return;
+
+    dispatch(fetchRecipes());
   }, [status.loadRecipes, dispatch]);
 
   return (

@@ -3,19 +3,33 @@ import {
   type ActionReducerMapBuilder,
 } from "@reduxjs/toolkit";
 
-import type { FilterOptions } from "@/shared/types";
-
 import type { RecipeState } from "../types";
 import { recipeService } from "../services";
 import type { Recipe } from "../validation";
 
-export const fetchRecipes = createAsyncThunk(
-  "recipes/fetchRecipes",
-  async (options: FilterOptions | undefined, { rejectWithValue }) => {
-    const response = await recipeService.getRecipes(options);
+type ReturnValue = {
+  recipes: Recipe[];
+  total: number;
+};
 
-    if (response.status === "success") return response.data?.recipes;
-    else return rejectWithValue(response.message);
+type Args = {
+  page?: number;
+  limit?: number;
+} | void;
+
+export const fetchRecipes = createAsyncThunk<ReturnValue, Args>(
+  "recipes/fetchRecipes",
+  async (config, { rejectWithValue }) => {
+    const page = config && config.page ? config.page : 1;
+    const limit = config && config.limit ? config.limit : 10;
+    const offset = Math.max(limit * (page - 1), 0);
+    const response = await recipeService.getRecipes({ limit, offset });
+
+    if (response.status === "success" && response.data) {
+      const { recipes, total } = response.data;
+
+      return { recipes, total };
+    } else return rejectWithValue(response.message);
   }
 );
 
@@ -28,8 +42,11 @@ export const addFetchRecipesCases = (
       delete state.errors.loadRecipes;
     })
     .addCase(fetchRecipes.fulfilled, (state, action) => {
+      const { recipes, total } = action.payload;
+
       state.status.loadRecipes = "success";
-      state.recipes = action.payload as Recipe[];
+      state.recipes = recipes;
+      state.totalRecipeCount = total;
     })
     .addCase(fetchRecipes.rejected, (state, action) => {
       state.status.loadRecipes = "error";

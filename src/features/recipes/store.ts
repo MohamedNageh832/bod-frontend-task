@@ -32,12 +32,9 @@ const initialSliceState: RecipeState = {
     query: "",
     results: [],
     lastQuery: "",
-    currentPage: 1,
-    totalRecipeCount: 0,
+    totalResults: 0,
   },
   recipes: [],
-  currentPage: 1,
-  rowsPerPage: 10,
   totalRecipeCount: 0,
   status: {
     loadRecipes: "idle",
@@ -58,24 +55,24 @@ const recipeSlice = createSlice({
   },
 });
 
-export const { updateSearchQuery, updateVisibleColumns } = recipeSlice.actions;
+export const { updateVisibleColumns } = recipeSlice.actions;
 
 const recipeReducer = recipeSlice.reducer;
 const selectSearch = (state: RootState) => state.recipes.search;
 const selectVisibleColumns = (state: RootState) =>
   state.recipes.visibleTableColumns;
 const selectRecipes = (state: RootState) => state.recipes.recipes;
-const selectStatus = (state: RootState) => state.recipes.status;
-const selectTotalRecipeCount = (state: RootState) =>
+const selectTotalRecipesCount = (state: RootState) =>
   state.recipes.totalRecipeCount;
-const selectRowsPerPage = (state: RootState) => state.recipes.rowsPerPage;
+const selectStatus = (state: RootState) => state.recipes.status;
+const selectErrors = (state: RootState) => state.recipes.errors;
 
 export {
   recipeReducer,
   selectRecipes,
-  selectStatus,
-  selectSearch,
   selectVisibleColumns,
-  selectTotalRecipeCount,
-  selectRowsPerPage,
+  selectSearch,
+  selectTotalRecipesCount,
+  selectStatus,
+  selectErrors,
 };
